@@ -10,4 +10,20 @@ export default NextAuth({
     }),
     // ...add more providers here
   ],
+  callbacks: {
+    async jwt({ token, account }) {
+      // Persist the OAuth access_token right after signin.
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Send access token to the client for GitHub API requests.
+      session.accessToken = token.accessToken;
+
+      return session;
+    },
+  },
+  secret: process.env.SECRET,
 });

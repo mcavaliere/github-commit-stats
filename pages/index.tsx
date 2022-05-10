@@ -1,8 +1,13 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Box, Container, Heading } from "@chakra-ui/react";
+import { Box, Button, Container, Heading } from "@chakra-ui/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Home: NextPage = () => {
+  const { data: session, status } = useSession({ required: true });
+  const loading = status === "loading";
+  const isLoggedIn = status === "authenticated";
+
   return (
     <Container maxW="2xl" centerContent>
       <Head>
@@ -13,6 +18,15 @@ const Home: NextPage = () => {
 
       <Box as="main">
         <Heading>GitHub Commit Stats</Heading>
+        {loading ? <p>Loading...</p> : null}
+        {isLoggedIn ? (
+          <>
+            <Heading size="md">Logged in.</Heading>
+            <Button onClick={() => signOut()}>Sign Out</Button>
+          </>
+        ) : (
+          <Button onClick={() => signIn()}>Sign In</Button>
+        )}
       </Box>
     </Container>
   );
