@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Box, Button, Container, Heading } from "@chakra-ui/react";
+import { Box, Button, Container, Heading, HStack } from "@chakra-ui/react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession({ required: true });
@@ -22,7 +23,15 @@ const Home: NextPage = () => {
         {isLoggedIn ? (
           <>
             <Heading size="md">Logged in.</Heading>
-            <Button onClick={() => signOut()}>Sign Out</Button>
+            <HStack>
+              <Link href="/dashboard" passHref>
+                <Button variant="solid">Dashboard</Button>
+              </Link>
+
+              <Button onClick={() => signOut()} variant="outline">
+                Sign Out
+              </Button>
+            </HStack>
           </>
         ) : (
           <Button onClick={() => signIn()}>Sign In</Button>
