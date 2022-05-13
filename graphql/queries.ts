@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
-export const VIEWER_REPOSITORIES_QUERY = gql`
-  {
+export const COMMITS_BY_REPOSITORY = gql`
+  query Commits($before: String) {
     viewer {
       login
       contributionsCollection {
@@ -13,21 +13,22 @@ export const VIEWER_REPOSITORIES_QUERY = gql`
           contributions(
             orderBy: { field: OCCURRED_AT, direction: DESC }
             first: 100
+            before: $before
           ) {
             nodes {
               commitCount
               occurredAt
-              repository {
-                name
-              }
+            }
+            pageInfo {
+              startCursor
+              endCursor
+              hasNextPage
+              hasPreviousPage
             }
             edges {
               node {
                 commitCount
                 occurredAt
-                repository {
-                  name
-                }
               }
               cursor
             }

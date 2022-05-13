@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "dayjs": "^1.11.2",
     "framer-motion": "^6.3.3",
     "graphql": "^16.5.0",
     "graphql-request": "^4.2.0",
