@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { Container, ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
@@ -21,7 +21,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     <ChakraProvider>
       <QueryClientProvider client={queryClient}>
         <SessionProvider session={session}>
-          <Component {...pageProps} />
+          <Container maxW="3xl" centerContent p={4}>
+            <Component {...pageProps} />
+          </Container>
         </SessionProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

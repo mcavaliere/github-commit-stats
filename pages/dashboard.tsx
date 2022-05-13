@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   Heading,
+  SimpleGrid,
   Table,
   Thead,
   Tbody,
@@ -37,9 +38,7 @@ export default function DashboardPage() {
       document: COMMITS_BY_REPOSITORY,
       // variables: { before: new Date().toISOString() },
     });
-    console.table(
-      data.viewer.contributionsCollection.commitContributionsByRepository
-    );
+
     return data.viewer.contributionsCollection.commitContributionsByRepository;
   };
 
@@ -51,50 +50,43 @@ export default function DashboardPage() {
     }
   );
 
-  data?.forEach(({ repository, contributions }) => {
-    console.log(`repository: ${repository.name}`, repository);
-    console.table(contributions);
-  });
-
   return (
     <>
       <Heading>Dashboard</Heading>
-      <VStack as="ul">
-        <li>Status: {status}</li>
-        <li>{`Error: ${error}`}</li>
-        <li>isFetching: {isFetching}</li>
-      </VStack>
-      {data?.map(
-        ({ repository, contributions: { nodes, edges, pageInfo } }) => (
-          <>
-            <Heading size="md">
-              {repository.name}
-              {repository.isPrivate ? "(private)" : null}
-            </Heading>
-            <TableContainer>
-              <Table variant="simple">
-                <TableCaption>Commit Count by Date</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>Date</Th>
-                    <Th>Commits</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {edges.map(
-                    ({ cursor, node: { commitCount, occurredAt } }) => (
-                      <Tr>
-                        <Td>{occurredAt}</Td>
-                        <Td isNumeric>{commitCount}</Td>
-                      </Tr>
-                    )
-                  )}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </>
-        )
-      )}
+
+      <SimpleGrid columns={2} spacing={10}>
+        {data?.map(
+          ({ repository, contributions: { nodes, edges, pageInfo } }) => (
+            <Box>
+              <Heading size="md">
+                {repository.name}
+                {repository.isPrivate ? "(private)" : null}
+              </Heading>
+              <TableContainer>
+                <Table variant="striped">
+                  <TableCaption>Commit Count by Date</TableCaption>
+                  <Thead>
+                    <Tr>
+                      <Th>Date</Th>
+                      <Th>Commits</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {edges.map(
+                      ({ cursor, node: { commitCount, occurredAt } }) => (
+                        <Tr>
+                          <Td>{occurredAt}</Td>
+                          <Td isNumeric>{commitCount}</Td>
+                        </Tr>
+                      )
+                    )}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            </Box>
+          )
+        )}
+      </SimpleGrid>
     </>
   );
 }
